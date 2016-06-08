@@ -1,0 +1,176 @@
+//
+//  SliderDemoController.m
+//  HsCalendar
+//
+//  Created by hundsun_mobile on 16/4/20.
+//  Copyright © 2016年 hundsun_mobile. All rights reserved.
+//
+
+#import "SliderDemoController.h"
+#import "HsCalendar.h"
+
+@interface SliderDemoController ()<UITableViewDataSource,UITableViewDelegate>{
+    UITableView *tableview;
+    UIView *contentview;
+    NSLayoutConstraint *topConstraint;
+    HsCalendar *calendar;
+    
+    float topValue;
+    float currentTopConstraintConstant;
+}
+
+@end
+
+@implementation SliderDemoController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    topValue = 300;
+    currentTopConstraintConstant = topValue;//tableview 距离顶部的高度
+    
+    calendar = [[HsCalendar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, topValue)];
+    [HsCalendar calendar].firstWeekday = 2;
+    [self.view addSubview:calendar];
+    
+    contentview = [[UIView alloc] init];
+    [contentview setBackgroundColor:[UIColor greenColor]];
+    [self.view addSubview:contentview];
+    [self setViewConstraint:contentview];
+    
+    tableview = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+    tableview.delegate = self;
+    tableview.dataSource = self;
+    tableview.backgroundColor = [UIColor clearColor];
+    tableview.scrollEnabled = NO;
+    [contentview addSubview:tableview];
+    [self setTableViewConstraint];
+    
+    UIPanGestureRecognizer* scrollPanGR = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handlePan:)];
+    scrollPanGR.maximumNumberOfTouches=1;
+    scrollPanGR.minimumNumberOfTouches=1;
+    [contentview addGestureRecognizer:scrollPanGR];
+}
+
+-(void)handlePan:(UIPanGestureRecognizer*)gesRec{
+    CGPoint offset = [gesRec translationInView:contentview];
+
+    if (gesRec.state == UIGestureRecognizerStateChanged) {
+        topConstraint.constant = currentTopConstraintConstant + offset.y;
+        [self.view layoutIfNeeded];
+        
+        if (topConstraint.constant < [calendar calendarHeightWhenInWeekMode]) {//两个日历week的高度  weekModel时的日历高度
+            topConstraint.constant = [calendar calendarHeightWhenInWeekMode];
+            tableview.scrollEnabled = YES;
+        }
+        if (topConstraint.constant > topValue) {
+            topConstraint.constant = topValue;
+            tableview.scrollEnabled = NO;
+            [tableview setContentOffset:CGPointMake(0, 0) animated:YES];
+        }
+    }
+    if (gesRec.state == UIGestureRecognizerStateEnded) {
+        CGFloat toTopConstant = topValue - (topValue - [calendar calendarHeightWhenInWeekMode])/3;
+        if (topConstraint.constant < toTopConstant) {
+            topConstraint.constant = [calendar calendarHeightWhenInWeekMode];
+            tableview.scrollEnabled = YES;
+        }else{
+            topConstraint.constant = topValue;
+            tableview.scrollEnabled = NO;
+            [tableview setContentOffset:CGPointMake(0, 0) animated:YES];
+        }
+        currentTopConstraintConstant = topConstraint.constant;
+    }
+}
+
+#pragma mark UITableViewDataSource
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return 20;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    UITableViewCell *cell = [[UITableViewCell alloc] init];
+    
+    cell.textLabel.text = [NSString stringWithFormat:@"%d",indexPath.row];
+    
+    return cell;
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+//    NSLog(@"%f",scrollView.contentOffset.y);
+    if (scrollView.contentOffset.y < 0) {
+        tableview.scrollEnabled = NO;
+        tableview.contentOffset = CGPointMake(0, 0);
+    }
+}
+
+-(void)setViewConstraint:(UIView *)view{
+    [view setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:view
+                                                          attribute:NSLayoutAttributeLeft
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeLeft
+                                                         multiplier:1.0
+                                                           constant:0]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:view
+                                                          attribute:NSLayoutAttributeRight
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeRight
+                                                         multiplier:1.0
+                                                           constant:0]];
+    topConstraint = [NSLayoutConstraint constraintWithItem:view
+                                                 attribute:NSLayoutAttributeTop
+                                                 relatedBy:NSLayoutRelationEqual
+                                                    toItem:self.view
+                                                 attribute:NSLayoutAttributeTop
+                                                multiplier:1.0
+                                                  constant:topValue];
+    [self.view addConstraint:topConstraint];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:view
+                                                          attribute:NSLayoutAttributeBottom
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeBottom
+                                                         multiplier:1.0
+                                                           constant:0]];
+}
+
+-(void)setTableViewConstraint{
+    [tableview setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [contentview addConstraint:[NSLayoutConstraint constraintWithItem:tableview
+                                                          attribute:NSLayoutAttributeLeft
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:contentview
+                                                          attribute:NSLayoutAttributeLeft
+                                                         multiplier:1.0
+                                                           constant:0]];
+    [contentview addConstraint:[NSLayoutConstraint constraintWithItem:tableview
+                                                          attribute:NSLayoutAttributeRight
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:contentview
+                                                          attribute:NSLayoutAttributeRight
+                                                         multiplier:1.0
+                                                           constant:0]];
+    [contentview addConstraint:[NSLayoutConstraint constraintWithItem:tableview
+                                                          attribute:NSLayoutAttributeTop
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:contentview
+                                                          attribute:NSLayoutAttributeTop
+                                                         multiplier:1.0
+                                                           constant:0]];
+    [contentview addConstraint:[NSLayoutConstraint constraintWithItem:tableview
+                                                          attribute:NSLayoutAttributeBottom
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:contentview
+                                                          attribute:NSLayoutAttributeBottom
+                                                         multiplier:1.0
+                                                           constant:0]];
+}
+
+
+@end
