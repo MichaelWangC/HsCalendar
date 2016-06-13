@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#define COLOR_VIEW_BG [UIColor whiteColor]
+
 @protocol HsCalendarDelegate;
 @protocol HsCalendarDataSource;
 @interface HsCalendar : UIView
@@ -17,7 +19,6 @@
 @property (nonatomic, strong) NSDate *currentDate;
 @property (nonatomic, strong, readonly) NSDate *visibleFirstDate;
 @property (nonatomic, strong, readonly) NSDate *visibleLastDate;
-@property (nonatomic, assign) BOOL isSliderWeekMode;
 
 //日期数据重新加载
 - (void)reloadData;

@@ -23,6 +23,7 @@
 -(instancetype)init{
     self = [super init];
     if (self) {
+        [self setBackgroundColor:COLOR_VIEW_BG];
         [self viewInit];
     }
     

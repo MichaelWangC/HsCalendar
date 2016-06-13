@@ -48,6 +48,7 @@
 
 -(void) viewInit{
     _calendarView = [[UIScrollView alloc] init];
+    [_calendarView setBackgroundColor:COLOR_VIEW_BG];
     [_calendarView setDelegate:self];
     [_calendarView setPagingEnabled:YES];
     [_calendarView setBackgroundColor:[UIColor whiteColor]];
@@ -223,8 +224,8 @@
 #pragma mark 返回代理方法
 -(void)delegateDidSelectDate:(NSDate *)dateSelected{
     if ([self.delegate respondsToSelector:@selector(calendarDidSelectedDate:)]) {
-        NSDate *localeDate = [self getLocalTimeZoneDate:dateSelected];
-        [self.delegate calendarDidSelectedDate:localeDate];
+//        NSDate *localeDate = [self getLocalTimeZoneDate:dateSelected];
+        [self.delegate calendarDidSelectedDate:dateSelected];
     }
 }
 

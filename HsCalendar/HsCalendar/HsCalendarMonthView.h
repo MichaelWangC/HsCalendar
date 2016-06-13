@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HsCaledarMonthView : UIScrollView
+@interface HsCaledarMonthView : UIView
 
 @property (nonatomic, strong) NSDate *currentDate;
 

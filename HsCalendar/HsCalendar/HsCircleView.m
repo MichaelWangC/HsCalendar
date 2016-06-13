@@ -19,7 +19,7 @@
     }
     
     self.backgroundColor = [UIColor clearColor];
-    self.color = [UIColor whiteColor];
+    self.color = [UIColor clearColor];
     
     return self;
 }
@@ -29,24 +29,30 @@
 {
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     
-    CGContextSetFillColorWithColor(ctx, [self.backgroundColor CGColor]);
-    CGContextFillRect(ctx, rect);
-    
-    rect = CGRectInset(rect, .5, .5);
-    
     CGContextSetStrokeColorWithColor(ctx, [self.color CGColor]);
     CGContextSetFillColorWithColor(ctx, [self.color CGColor]);
     
     CGContextAddEllipseInRect(ctx, rect);
-    CGContextFillEllipseInRect(ctx, rect);
     
-    CGContextFillPath(ctx);
+    if (_isStroke) {
+        CGContextSetLineWidth(ctx, 2.0);
+        CGContextStrokePath(ctx);
+    }else{
+        CGContextFillPath(ctx);
+    }
 }
 
 - (void)setColor:(UIColor *)color
 {
     if (!CGColorEqualToColor(_color.CGColor, color.CGColor)) {
         _color = color;
+        [self setNeedsDisplay];
+    }
+}
+
+- (void)setIsStroke:(BOOL)isStroke{
+    if (_isStroke != isStroke) {
+        _isStroke = isStroke;
         [self setNeedsDisplay];
     }
 }

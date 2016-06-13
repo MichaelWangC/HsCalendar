@@ -15,12 +15,12 @@
 #define kDayCircleColorSelected [UIColor redColor]
 
 #define kDayTextColor [UIColor blackColor]
-#define kDayTextColorToday [UIColor whiteColor]
+#define kDayTextColorToday [UIColor colorWithRed:0x33/256. green:0xB3/256. blue:0xEC/256. alpha:.5]
 #define kDayTextColorSelected [UIColor whiteColor]
 #define kDayTextColorOtherMonth [UIColor colorWithRed:152./256. green:147./256. blue:157./256. alpha:1.]
 
 #define kDotViewColor [UIColor colorWithRed:43./256. green:88./256. blue:134./256. alpha:1.]
-#define kDotViewColorToday [UIColor whiteColor]
+#define kDotViewColorToday [UIColor colorWithRed:0x33/256. green:0xB3/256. blue:0xEC/256. alpha:.5]
 #define kDotViewColorSelected [UIColor whiteColor]
 #define kDotViewColorOhterMonth [UIColor colorWithRed:152./256. green:147./256. blue:157./256. alpha:1.]
 
@@ -40,6 +40,7 @@ static NSDate *selectedDate;
 -(instancetype)init{
     self = [super init];
     if (self) {
+        [self setBackgroundColor:COLOR_VIEW_BG];
         [self viewInit];
     }
     return self;
@@ -119,6 +120,7 @@ static NSDate *selectedDate;
 #pragma mark 样式、颜色设置
 -(void)setDayViewColor{
     if ([self isToday]) {
+        [circleView setIsStroke:YES];
         [circleView setColor:kDayCircleColorToday];
         [textLabel setTextColor:kDayTextColorToday];
         [dotView setColor:kDotViewColorToday];
@@ -132,6 +134,7 @@ static NSDate *selectedDate;
         [dotView setColor:kDotViewColor];
     }
     if (isSelected && !_isOtherMonth) {
+        [circleView setIsStroke:NO];
         [circleView setColor:kDayCircleColorSelected];
         [textLabel setTextColor:kDayTextColorSelected];
         [dotView setColor:kDotViewColorSelected];
