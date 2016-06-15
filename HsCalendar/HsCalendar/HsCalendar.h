@@ -19,6 +19,7 @@
 @property (nonatomic, strong) NSDate *currentDate;
 @property (nonatomic, strong, readonly) NSDate *visibleFirstDate;
 @property (nonatomic, strong, readonly) NSDate *visibleLastDate;
+@property (nonatomic, assign) BOOL isWeekMode;
 
 //日期数据重新加载
 - (void)reloadData;
@@ -28,8 +29,11 @@
 
 -(CGFloat)calendarHeightWhenInWeekMode;
 -(CGFloat)calendarHeightWhenInNomelMode;
+-(void)setCalendarScrollY:(float)offsetY;
 
+//获取使用的日历类
 +(NSCalendar *)calendar;
++(BOOL)isWeekMode;
 
 @end
 

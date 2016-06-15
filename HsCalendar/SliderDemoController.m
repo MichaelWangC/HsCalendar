@@ -9,11 +9,12 @@
 #import "SliderDemoController.h"
 #import "HsCalendar.h"
 
-@interface SliderDemoController ()<UITableViewDataSource,UITableViewDelegate>{
+@interface SliderDemoController ()<UITableViewDataSource,UITableViewDelegate,HsCalendarDelegate>{
     UITableView *tableview;
     UIView *contentview;
     NSLayoutConstraint *topConstraint;
     HsCalendar *calendar;
+    UILabel *textYearAndMonth;
     
     float topValue;
     float currentTopConstraintConstant;
@@ -29,6 +30,7 @@
     currentTopConstraintConstant = topValue;//tableview 距离顶部的高度
     
     calendar = [[HsCalendar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, topValue)];
+    calendar.delegate = self;
     [HsCalendar calendar].firstWeekday = 2;
     [self.view addSubview:calendar];
     
@@ -49,11 +51,21 @@
     scrollPanGR.maximumNumberOfTouches=1;
     scrollPanGR.minimumNumberOfTouches=1;
     [contentview addGestureRecognizer:scrollPanGR];
+    
+    textYearAndMonth = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
+    textYearAndMonth.textAlignment = NSTextAlignmentCenter;
+    [self.navigationItem setTitleView:textYearAndMonth];
+}
+
+-(void)calendarCurrentYear:(NSUInteger)year andMonth:(NSUInteger)month{
+    textYearAndMonth.text = [NSString stringWithFormat:@"%d年%d月",year,month];
+    
 }
 
 -(void)handlePan:(UIPanGestureRecognizer*)gesRec{
     CGPoint offset = [gesRec translationInView:contentview];
-
+    NSLog(@"offset y %f",offset.y);
+    [calendar setCalendarScrollY:offset.y];
     if (gesRec.state == UIGestureRecognizerStateChanged) {
         topConstraint.constant = currentTopConstraintConstant + offset.y;
         [self.view layoutIfNeeded];
@@ -73,10 +85,12 @@
         if (topConstraint.constant < toTopConstant) {
             topConstraint.constant = [calendar calendarHeightWhenInWeekMode];
             tableview.scrollEnabled = YES;
+            [calendar setIsWeekMode:YES];
         }else{
             topConstraint.constant = topValue;
             tableview.scrollEnabled = NO;
             [tableview setContentOffset:CGPointMake(0, 0) animated:YES];
+            [calendar setIsWeekMode:NO];
         }
         currentTopConstraintConstant = topConstraint.constant;
     }
@@ -97,6 +111,10 @@
     cell.textLabel.text = [NSString stringWithFormat:@"%d",indexPath.row];
     
     return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableview deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{

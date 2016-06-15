@@ -124,7 +124,7 @@ static NSDate *selectedDate;
         [circleView setColor:kDayCircleColorToday];
         [textLabel setTextColor:kDayTextColorToday];
         [dotView setColor:kDotViewColorToday];
-    }else if (_isOtherMonth){
+    }else if (_isOtherMonth && !_isWeekMode){
         [circleView setColor:kDayCircleColor];
         [textLabel setTextColor:kDayTextColorOtherMonth];
         [dotView setColor:kDotViewColorOhterMonth];
@@ -133,7 +133,7 @@ static NSDate *selectedDate;
         [textLabel setTextColor:kDayTextColor];
         [dotView setColor:kDotViewColor];
     }
-    if (isSelected && !_isOtherMonth) {
+    if (isSelected && (!_isOtherMonth || _isWeekMode)) {
         [circleView setIsStroke:NO];
         [circleView setColor:kDayCircleColorSelected];
         [textLabel setTextColor:kDayTextColorSelected];

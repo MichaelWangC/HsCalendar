@@ -10,6 +10,8 @@
 #import "HsCalendar.h"
 #import "HsCalendarDayView.h"
 
+#define kWeekNum 7
+
 @implementation HsCalendarWeekView{
     NSArray *daysViews;
     
@@ -28,7 +30,7 @@
 -(void)viewInit{
     NSMutableArray *views = [NSMutableArray new];
     
-    for(int i = 0; i < 7; ++i){
+    for(int i = 0; i < kWeekNum; ++i){
         UIView *view = [HsCalendarDayView new];
         
         [views addObject:view];
@@ -62,12 +64,25 @@
         NSInteger monthIndex = comps.month;
         
         dayview.isOtherMonth = monthIndex!=self.currentMonthIndex;
+        dayview.isWeekMode = _isWeekMode;
         [dayview setCurrentDate:currentDate];
         
         NSDateComponents *dayComponent = [NSDateComponents new];
         dayComponent.day = 1;
         currentDate = [[HsCalendar calendar] dateByAddingComponents:dayComponent toDate:currentDate options:0];
     }
+}
+
+-(NSDate *)weekFirstDate{
+    return _currentDate;
+}
+
+-(NSDate *)weekLastDate{
+    NSDate *lastDate;
+    NSDateComponents *dayComponent = [NSDateComponents new];
+    dayComponent.day = kWeekNum - 1;
+    lastDate = [[HsCalendar calendar] dateByAddingComponents:dayComponent toDate:_currentDate options:0];
+    return lastDate;
 }
 
 @end

@@ -28,7 +28,7 @@ static NSArray *cacheTitlesOfWeek;
 }
 
 -(void)viewInit{
-    [self setBackgroundColor:[UIColor clearColor]];
+    [self setBackgroundColor:[UIColor whiteColor]];
     
     for (int i = 0; i < kNumWeekDays; i++) {
         UILabel *view = [UILabel new];

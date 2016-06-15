@@ -13,4 +13,9 @@
 @property (nonatomic, strong) NSDate *currentDate;
 @property (assign, nonatomic) NSUInteger currentMonthIndex;
 
+@property (nonatomic, strong, readonly) NSDate *weekFirstDate;
+@property (nonatomic, strong, readonly) NSDate *weekLastDate;
+
+@property (nonatomic, assign) BOOL isWeekMode;
+
 @end

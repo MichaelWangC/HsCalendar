@@ -15,6 +15,7 @@
 
 @property (nonatomic, strong) NSDate *currentDate;
 @property (assign, nonatomic) BOOL isOtherMonth;
+@property (nonatomic, assign) BOOL isWeekMode;
 
 +(void)setSelectedDate:(NSDate *)date;
 

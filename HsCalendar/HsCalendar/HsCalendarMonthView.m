@@ -15,6 +15,7 @@
 
 @implementation HsCaledarMonthView{
     NSArray *weeksViews;
+    HsCalendarWeekTitleView *weektitleView;
     
     CGFloat _viewWidth;
     CGFloat _viewHeight;
@@ -33,9 +34,6 @@
 -(void) viewInit{
     NSMutableArray *views = [NSMutableArray new];
     
-    HsCalendarWeekTitleView *weektitleView = [HsCalendarWeekTitleView new];
-    [self addSubview:weektitleView];
-    
     for(int i = 0; i < WEEKS_TO_DISPLAY; ++i){
         UIView *view = [HsCalendarWeekView new];
         
@@ -44,6 +42,9 @@
     }
     
     weeksViews = views;
+    
+    weektitleView = [HsCalendarWeekTitleView new];
+    [self addSubview:weektitleView];
 }
 
 -(void)layoutSubviews{
@@ -63,9 +64,10 @@
         _viewHeight = self.frame.size.height;
         CGFloat height = self.frame.size.height / weeksToDisplay;
         
-        for(int i = 0; i < self.subviews.count; ++i){
-            UIView *view = self.subviews[i];
-            
+        weektitleView.frame = CGRectMake(0, y, _viewWidth, height);
+        
+        y = CGRectGetMaxY(weektitleView.frame);
+        for (UIView *view in weeksViews) {
             view.frame = CGRectMake(0, y, _viewWidth, height);
             y = CGRectGetMaxY(view.frame);
         }
@@ -87,6 +89,7 @@
     }
     
     for (HsCalendarWeekView *weekView in weeksViews) {
+        [weekView setIsWeekMode:_isWeekMode];
         [weekView setCurrentMonthIndex:currentMonthIndex];
         [weekView setCurrentDate:currentDate];
         
@@ -96,6 +99,10 @@
         currentDate = [calendar dateByAddingComponents:dayComponent toDate:currentDate options:0];
         
     }
+}
+
+-(NSArray *)weekViews{
+    return weeksViews;
 }
 
 @end

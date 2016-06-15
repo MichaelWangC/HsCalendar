@@ -8,6 +8,7 @@
 
 #import "HsCalendar.h"
 #import "HsCalendarMonthView.h"
+#import "HsCalendarWeekView.h"
 #import "HsCalendarDayView.h"
 
 #define NUMBER_PAGES_LOADED 3
@@ -111,10 +112,18 @@
         int midpage = NUMBER_PAGES_LOADED/2;
         NSDateComponents *dayComponent = [NSDateComponents new];
         
-        dayComponent.month = i - midpage;
-        NSDate *currentDate = [[HsCalendar calendar] dateByAddingComponents:dayComponent toDate:_currentDate options:0];
+        NSDate *beginMonth;
+        if (_isWeekMode) {
+            beginMonth = [self beginningOfMonth:_currentDate];
+            dayComponent.day = (i - midpage) * 7;
+            beginMonth = [[HsCalendar calendar] dateByAddingComponents:dayComponent toDate:beginMonth options:0];
+        }else{
+            dayComponent.month = i - midpage;
+            NSDate *currentDate = [[HsCalendar calendar] dateByAddingComponents:dayComponent toDate:_currentDate options:0];
+            beginMonth = [self beginningOfMonth:currentDate];
+        }
         
-        NSDate *beginMonth = [self beginningOfMonth:currentDate];
+        [view setIsWeekMode:_isWeekMode];
         [view setCurrentDate:beginMonth];
         
         i++;
@@ -179,11 +188,16 @@
     
     NSDateComponents *dayComponent = [NSDateComponents new];
     
-    dayComponent.month = currentPage - midpage;
+    if (_isWeekMode) {
+        dayComponent.day = (currentPage - midpage) * 7;
+    }else{
+        dayComponent.month = currentPage - midpage;
+    }
     NSDate *monthDate = [[HsCalendar calendar] dateByAddingComponents:dayComponent toDate:_currentDate options:0];
+
     [self setCurrentMonthDate:monthDate];
     [self reloadData];
-    
+    [self resetCalendarFrame];
     //delegate
     if ([self.delegate respondsToSelector:@selector(calendarCurrentYear:andMonth:)]) {
         NSDateComponents *componentsCurrentDate = [[HsCalendar calendar] components:NSCalendarUnitYear|NSCalendarUnitMonth fromDate:_currentDate];
@@ -199,17 +213,17 @@
     NSInteger currentMonthIndex = [self monthIndexForDate:_currentDate];
     NSInteger calendarMonthIndex = [self monthIndexForDate:dateSelected];
     
-    if(currentMonthIndex == calendarMonthIndex+1){
+    if(currentMonthIndex == calendarMonthIndex+1 && !_isWeekMode){
         selectedNextOrPreMonthDay = dateSelected;
         [self loadPreviousMonth];
         return;
     }
-    if (currentMonthIndex == calendarMonthIndex-1) {
+    if (currentMonthIndex == calendarMonthIndex-1 && !_isWeekMode) {
         selectedNextOrPreMonthDay = dateSelected;
         [self loadNextMonth];
         return;
     }
-    //本月 不会滚动，此处需返回已选日期
+    //本月或按周显示 不会滚动，此处需返回已选日期
     _currentDate = dateSelected;
     [self delegateDidSelectDate:dateSelected];
 }
@@ -263,6 +277,88 @@
 #pragma mark 日历高度
 -(CGFloat)calendarHeightWhenInNomelMode{
     return _viewHeight;
+}
+
+#pragma mark 滑动offset y
+-(void)setCalendarScrollY:(float)offsetY{
+    HsCaledarMonthView *monthView = [_visibleViews objectAtIndex:NUMBER_PAGES_LOADED/2];
+    float monthViewOffsetY = monthView.scrollOffsetY + offsetY;
+    float viewHeight = _viewHeight / 7;
+    int i = 1;//最上方有weektitle
+    int selectIndex = -1;
+    for (HsCalendarWeekView *view in [monthView weekViews]) {
+        CGRect tmpFrame = view.frame;
+        
+        if (i == 1 && tmpFrame.origin.y + monthViewOffsetY > viewHeight) monthViewOffsetY = 0;
+        
+        NSDate *weekFirstDate = [view weekFirstDate];
+        NSDate *weekLastDate = [view weekLastDate];
+        NSComparisonResult compareWeekFirst = [_currentDate compare:weekFirstDate];
+        NSComparisonResult compareWeekLast = [_currentDate compare:weekLastDate];
+        BOOL isEqualOrGreaterFirst = compareWeekFirst == NSOrderedDescending || compareWeekFirst == NSOrderedSame;
+        BOOL isLessOrEqualLast = compareWeekLast == NSOrderedAscending || compareWeekLast == NSOrderedSame;
+        if (isEqualOrGreaterFirst && isLessOrEqualLast) {
+            selectIndex = i-1;
+        }
+        
+        if (selectIndex != -1 && monthViewOffsetY < -viewHeight*selectIndex) monthViewOffsetY = -viewHeight*selectIndex;
+        
+        tmpFrame.origin.y = monthViewOffsetY + viewHeight*i;
+        view.frame = tmpFrame;
+        i++;
+    }
+}
+
+#pragma mark 周模式
+-(void)setIsWeekMode:(BOOL)isWeekMode{
+    _isWeekMode = isWeekMode;
+//    [self resetCalendarFrame];
+    [self showCalendar];
+}
+
+-(void)resetCalendarFrame{
+    if (_isWeekMode) {
+        HsCaledarMonthView *midMonthView = [_visibleViews objectAtIndex:NUMBER_PAGES_LOADED/2];
+        float viewHeight = _viewHeight / 7;
+        int selectIndex = 0;
+        int i = 1;//最上方有weektitle
+        for (HsCalendarWeekView *view in [midMonthView weekViews]) {
+            NSDate *weekFirstDate = [view weekFirstDate];
+            NSDate *weekLastDate = [view weekLastDate];
+            NSComparisonResult compareWeekFirst = [_currentDate compare:weekFirstDate];
+            NSComparisonResult compareWeekLast = [_currentDate compare:weekLastDate];
+            BOOL isEqualOrGreaterFirst = compareWeekFirst == NSOrderedDescending || compareWeekFirst == NSOrderedSame;
+            BOOL isLessOrEqualLast = compareWeekLast == NSOrderedAscending || compareWeekLast == NSOrderedSame;
+            if (isEqualOrGreaterFirst && isLessOrEqualLast) {
+                selectIndex = i-1;
+            }
+            i++;
+        }
+        
+        for (HsCaledarMonthView *monthView in _visibleViews) {
+            i = 1;
+            monthView.scrollOffsetY = -viewHeight*selectIndex;
+            for (HsCalendarWeekView *view in [monthView weekViews]) {
+                CGRect tmpFrame = view.frame;
+                tmpFrame.origin.y = monthView.scrollOffsetY + viewHeight*i;
+                view.frame = tmpFrame;
+                i++;
+            }
+        }
+    }else{
+        //日历滚动到 月 状态
+        for (HsCaledarMonthView *monthView in _visibleViews) {
+            monthView.scrollOffsetY = 0;
+            float viewHeight = _viewHeight / 7;
+            int i = 1;//最上方有weektitle
+            for (UIView *view in [monthView weekViews]) {
+                CGRect tmpFrame = view.frame;
+                tmpFrame.origin.y = viewHeight*i;
+                view.frame = tmpFrame;
+                i++;
+            }
+        }
+    }
 }
 
 #pragma mark 转换为当前时区 时间

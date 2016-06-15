@@ -11,5 +11,9 @@
 @interface HsCaledarMonthView : UIView
 
 @property (nonatomic, strong) NSDate *currentDate;
+@property (nonatomic, assign) float scrollOffsetY;
+@property (nonatomic, assign) BOOL isWeekMode;
+
+-(NSArray *)weekViews;
 
 @end
