@@ -150,20 +150,41 @@
     return [calendar dateFromComponents:componentsNewDate];
 }
 
+#pragma mark 周 第一天
+- (NSDate *)beginningOfWeek:(NSDate *)date{
+    NSCalendar *calendar = [HsCalendar calendar];
+    NSDateComponents *componentsCurrentDate = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitWeekday|NSCalendarUnitWeekOfMonth fromDate:date];
+    
+    NSDateComponents *componentsNewDate = [NSDateComponents new];
+    
+    componentsNewDate.year = componentsCurrentDate.year;
+    componentsNewDate.month = componentsCurrentDate.month;
+    componentsNewDate.weekOfMonth = componentsCurrentDate.weekOfMonth;
+    componentsNewDate.weekday = calendar.firstWeekday;
+    
+    return [calendar dateFromComponents:componentsNewDate];
+}
+
 #pragma mark 显示 第一天和最后一天 日期
 -(NSDate *)visibleFirstDate{
     NSDate *firstDate = [self beginningOfMonth:_currentDate];
+    if (_isWeekMode) firstDate = [self beginningOfWeek:_currentDate];
     firstDate = [self getLocalTimeZoneDate:firstDate];
     return firstDate;
 }
 
 -(NSDate *)visibleLastDate{
     NSDate *firstDate = [self beginningOfMonth:_currentDate];
+    if (_isWeekMode) firstDate = [self beginningOfWeek:_currentDate];
     NSDateComponents *dayComponent = [NSDateComponents new];
     
     NSInteger weekDayNum = 7;
     NSInteger weekViewsNum = 6;
-    dayComponent.day = weekViewsNum * weekDayNum - 1;
+    if (_isWeekMode) {
+        dayComponent.day = weekDayNum - 1;
+    }else{
+        dayComponent.day = weekViewsNum * weekDayNum - 1;
+    }
     
     NSDate *lastDate = [[HsCalendar calendar] dateByAddingComponents:dayComponent toDate:firstDate options:0];
     lastDate = [self getLocalTimeZoneDate:lastDate];

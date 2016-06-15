@@ -59,12 +59,11 @@
 
 -(void)calendarCurrentYear:(NSUInteger)year andMonth:(NSUInteger)month{
     textYearAndMonth.text = [NSString stringWithFormat:@"%d年%d月",year,month];
-    
+    NSLog(@"%@===%@",calendar.visibleFirstDate,calendar.visibleLastDate);
 }
 
 -(void)handlePan:(UIPanGestureRecognizer*)gesRec{
     CGPoint offset = [gesRec translationInView:contentview];
-    NSLog(@"offset y %f",offset.y);
     [calendar setCalendarScrollY:offset.y];
     if (gesRec.state == UIGestureRecognizerStateChanged) {
         topConstraint.constant = currentTopConstraintConstant + offset.y;
