@@ -150,7 +150,7 @@
     return [calendar dateFromComponents:componentsNewDate];
 }
 
-#pragma mark 显示的第一天和最后一天 日期
+#pragma mark 显示 第一天和最后一天 日期
 -(NSDate *)visibleFirstDate{
     NSDate *firstDate = [self beginningOfMonth:_currentDate];
     firstDate = [self getLocalTimeZoneDate:firstDate];
@@ -198,11 +198,6 @@
     [self setCurrentMonthDate:monthDate];
     [self reloadData];
     [self resetCalendarFrame];
-    //delegate
-    if ([self.delegate respondsToSelector:@selector(calendarCurrentYear:andMonth:)]) {
-        NSDateComponents *componentsCurrentDate = [[HsCalendar calendar] components:NSCalendarUnitYear|NSCalendarUnitMonth fromDate:_currentDate];
-        [self.delegate calendarCurrentYear:componentsCurrentDate.year andMonth:componentsCurrentDate.month];
-    }
 }
 
 #pragma mark 点击选择日期
@@ -240,6 +235,10 @@
     if ([self.delegate respondsToSelector:@selector(calendarDidSelectedDate:)]) {
 //        NSDate *localeDate = [self getLocalTimeZoneDate:dateSelected];
         [self.delegate calendarDidSelectedDate:dateSelected];
+    }
+    if ([self.delegate respondsToSelector:@selector(calendarCurrentYear:andMonth:)]) {
+        NSDateComponents *componentsCurrentDate = [[HsCalendar calendar] components:NSCalendarUnitYear|NSCalendarUnitMonth fromDate:dateSelected];
+        [self.delegate calendarCurrentYear:componentsCurrentDate.year andMonth:componentsCurrentDate.month];
     }
 }
 
