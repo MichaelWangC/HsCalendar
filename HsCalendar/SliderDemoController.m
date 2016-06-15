@@ -59,7 +59,7 @@
 
 -(void)calendarCurrentYear:(NSUInteger)year andMonth:(NSUInteger)month{
     textYearAndMonth.text = [NSString stringWithFormat:@"%d年%d月",year,month];
-    NSLog(@"%@===%@",calendar.visibleFirstDate,calendar.visibleLastDate);
+//    NSLog(@"%@===%@",calendar.visibleFirstDate,calendar.visibleLastDate);
 }
 
 -(void)handlePan:(UIPanGestureRecognizer*)gesRec{
