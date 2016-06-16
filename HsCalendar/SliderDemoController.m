@@ -92,17 +92,21 @@
         }
     }
     if (gesRec.state == UIGestureRecognizerStateEnded) {
-        CGFloat toTopConstant = topValue - (topValue - [calendar calendarHeightWhenInWeekMode])/3;
-        if (topConstraint.constant < toTopConstant) {
-            topConstraint.constant = [calendar calendarHeightWhenInWeekMode];
-            tableview.scrollEnabled = YES;
-            [calendar setIsWeekMode:YES];
-        }else{
-            topConstraint.constant = topValue;
-            tableview.scrollEnabled = NO;
-            [tableview setContentOffset:CGPointMake(0, 0) animated:YES];
-            [calendar setIsWeekMode:NO];
-        }
+        [self.view setNeedsLayout];
+        [UIView animateWithDuration:0.4 animations:^{
+            CGFloat toTopConstant = topValue - (topValue - [calendar calendarHeightWhenInWeekMode])/3;
+            if (topConstraint.constant < toTopConstant) {
+                topConstraint.constant = [calendar calendarHeightWhenInWeekMode];
+                tableview.scrollEnabled = YES;
+                [calendar setIsWeekMode:YES];
+            }else{
+                topConstraint.constant = topValue;
+                tableview.scrollEnabled = NO;
+                [tableview setContentOffset:CGPointMake(0, 0) animated:YES];
+                [calendar setIsWeekMode:NO];
+            }
+            [self.view layoutIfNeeded];
+        }];
         currentTopConstraintConstant = topConstraint.constant;
     }
 }
