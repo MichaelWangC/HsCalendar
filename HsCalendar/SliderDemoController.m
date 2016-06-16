@@ -9,7 +9,7 @@
 #import "SliderDemoController.h"
 #import "HsCalendar.h"
 
-@interface SliderDemoController ()<UITableViewDataSource,UITableViewDelegate,HsCalendarDelegate>{
+@interface SliderDemoController ()<UITableViewDataSource,UITableViewDelegate,HsCalendarDelegate,HsCalendarDataSource>{
     UITableView *tableview;
     UIView *contentview;
     NSLayoutConstraint *topConstraint;
@@ -31,6 +31,7 @@
     
     calendar = [[HsCalendar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, topValue)];
     calendar.delegate = self;
+    calendar.dataSource = self;
     [HsCalendar calendar].firstWeekday = 2;
     [self.view addSubview:calendar];
     
@@ -55,6 +56,10 @@
     textYearAndMonth = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
     textYearAndMonth.textAlignment = NSTextAlignmentCenter;
     [self.navigationItem setTitleView:textYearAndMonth];
+}
+
+-(NSArray<NSDate *> *)calendarHaveEvent:(HsCalendar *)calendar{
+    return @[[NSDate date],[NSDate dateWithTimeIntervalSinceNow:-1*24*60*60],[NSDate dateWithTimeIntervalSinceNow:-8*24*60*60]];
 }
 
 -(void)calendarCurrentYear:(NSUInteger)year andMonth:(NSUInteger)month{

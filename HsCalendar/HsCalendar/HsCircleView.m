@@ -19,10 +19,10 @@
     
     self.backgroundColor = [UIColor clearColor];
     self.color = [UIColor clearColor];
+    self.circleMargin = 0;
     
     return self;
 }
-
 
 - (void)drawRect:(CGRect)rect
 {
@@ -33,7 +33,7 @@
     
     //绘制圆形 rect设置
     CGRect tmpRect = rect;
-    float paddingW = 3;
+    float paddingW = _circleMargin;
     tmpRect.origin.x += paddingW;
     tmpRect.origin.y += paddingW;
     tmpRect.size.height -= paddingW * 2;

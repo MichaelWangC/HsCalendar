@@ -34,6 +34,7 @@ static NSDate *selectedDate;
 
 -(void)viewInit{
     circleView = [HsCircleView new];
+    circleView.circleMargin = 3;
     [self addSubview:circleView];
     
     textLabel = [[UILabel alloc] init];

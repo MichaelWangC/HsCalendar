@@ -26,9 +26,9 @@
     calendar.delegate = self;
     calendar.dataSource = self;
     //添加默认天数
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-dd"];
-    [calendar setCurrentDate:[formatter dateFromString:@"2016-4-14"]];
+//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//    [formatter setDateFormat:@"yyyy-MM-dd"];
+//    [calendar setCurrentDate:[formatter dateFromString:@"2016-4-14"]];
     
     [HsCalendar calendar].firstWeekday = 2;
     [self.view addSubview:calendar];

@@ -12,5 +12,6 @@
 
 @property (nonatomic, strong) UIColor *color;
 @property (nonatomic, assign) BOOL isStroke;
+@property (nonatomic, assign) float circleMargin;
 
 @end
