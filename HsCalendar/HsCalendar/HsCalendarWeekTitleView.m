@@ -10,7 +10,6 @@
 #import "HsCalendar.h"
 
 #define kNumWeekDays 7
-#define kTitleColor [UIColor blackColor]
 
 @implementation HsCalendarWeekTitleView{
     CGFloat _viewWidth;
@@ -28,12 +27,12 @@ static NSArray *cacheTitlesOfWeek;
 }
 
 -(void)viewInit{
-    [self setBackgroundColor:[UIColor whiteColor]];
+    [self setBackgroundColor:COLOR_VIEW_BG];
     
     for (int i = 0; i < kNumWeekDays; i++) {
         UILabel *view = [UILabel new];
         view.font = [UIFont systemFontOfSize:15];
-        view.textColor = kTitleColor;
+        view.textColor = kWeekTitleTextColor;
         view.textAlignment = NSTextAlignmentCenter;
         [self addSubview:view];
     }

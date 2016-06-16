@@ -7,8 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-#define COLOR_VIEW_BG [UIColor whiteColor]
+#import "style_colors.h"
 
 @protocol HsCalendarDelegate;
 @protocol HsCalendarDataSource;

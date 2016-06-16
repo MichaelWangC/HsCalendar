@@ -7,7 +7,6 @@
 //
 
 #import "HsCircleView.h"
-#import "HsCircleView.h"
 
 @implementation HsCircleView
 
@@ -32,10 +31,17 @@
     CGContextSetStrokeColorWithColor(ctx, [self.color CGColor]);
     CGContextSetFillColorWithColor(ctx, [self.color CGColor]);
     
-    CGContextAddEllipseInRect(ctx, rect);
+    //绘制圆形 rect设置
+    CGRect tmpRect = rect;
+    float paddingW = 3;
+    tmpRect.origin.x += paddingW;
+    tmpRect.origin.y += paddingW;
+    tmpRect.size.height -= paddingW * 2;
+    tmpRect.size.width -= paddingW * 2;
+    CGContextAddEllipseInRect(ctx, tmpRect);
     
     if (_isStroke) {
-        CGContextSetLineWidth(ctx, 2.0);
+        CGContextSetLineWidth(ctx, 1.0);
         CGContextStrokePath(ctx);
     }else{
         CGContextFillPath(ctx);
