@@ -32,7 +32,6 @@
 
 //获取使用的日历类
 +(NSCalendar *)calendar;
-+(BOOL)isWeekMode;
 
 @end
 

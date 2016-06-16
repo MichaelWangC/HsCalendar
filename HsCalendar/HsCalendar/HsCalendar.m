@@ -47,6 +47,11 @@
     return self;
 }
 
+-(void)setFrame:(CGRect)frame{
+    [super setFrame:frame];
+    _viewHeight = frame.size.height;
+}
+
 -(void) viewInit{
     _calendarView = [[UIScrollView alloc] init];
     [_calendarView setBackgroundColor:COLOR_VIEW_BG];
@@ -203,6 +208,7 @@
 
 #pragma mark 显示日历
 -(void)showCalendar{
+    if (_viewWidth == 0) return;
     int currentPage = _calendarView.contentOffset.x/_viewWidth;
     
     int midpage = NUMBER_PAGES_LOADED/2;
@@ -332,7 +338,6 @@
 #pragma mark 周模式
 -(void)setIsWeekMode:(BOOL)isWeekMode{
     _isWeekMode = isWeekMode;
-//    [self resetCalendarFrame];
     [self showCalendar];
 }
 

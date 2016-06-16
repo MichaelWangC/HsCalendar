@@ -32,6 +32,7 @@
     calendar = [[HsCalendar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, topValue)];
     calendar.delegate = self;
     calendar.dataSource = self;
+    calendar.isWeekMode = YES;
     [HsCalendar calendar].firstWeekday = 2;
     [self.view addSubview:calendar];
     
@@ -58,6 +59,10 @@
     [self.navigationItem setTitleView:textYearAndMonth];
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+    [self.view layoutIfNeeded];
+}
+
 -(NSArray<NSDate *> *)calendarHaveEvent:(HsCalendar *)calendar{
     return @[[NSDate date],[NSDate dateWithTimeIntervalSinceNow:-1*24*60*60],[NSDate dateWithTimeIntervalSinceNow:-8*24*60*60]];
 }
@@ -69,12 +74,14 @@
 
 -(void)handlePan:(UIPanGestureRecognizer*)gesRec{
     CGPoint offset = [gesRec translationInView:contentview];
+
     [calendar setCalendarScrollY:offset.y];
+    
     if (gesRec.state == UIGestureRecognizerStateChanged) {
         topConstraint.constant = currentTopConstraintConstant + offset.y;
         [self.view layoutIfNeeded];
         
-        if (topConstraint.constant < [calendar calendarHeightWhenInWeekMode]) {//两个日历week的高度  weekModel时的日历高度
+        if (topConstraint.constant < [calendar calendarHeightWhenInWeekMode]) {//两个日历week的高度  周模式下的日历高度
             topConstraint.constant = [calendar calendarHeightWhenInWeekMode];
             tableview.scrollEnabled = YES;
         }
@@ -151,8 +158,9 @@
                                                     toItem:self.view
                                                  attribute:NSLayoutAttributeTop
                                                 multiplier:1.0
-                                                  constant:topValue];
+                                                  constant:[calendar calendarHeightWhenInWeekMode]];
     [self.view addConstraint:topConstraint];
+    currentTopConstraintConstant = topConstraint.constant;
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:view
                                                           attribute:NSLayoutAttributeBottom
                                                           relatedBy:NSLayoutRelationEqual
