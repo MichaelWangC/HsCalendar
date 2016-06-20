@@ -363,38 +363,33 @@
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:0.4 animations:^{
-                for (HsCaledarMonthView *monthView in _visibleViews) {
-                    int i = 1;
-                    monthView.scrollOffsetY = -viewHeight*selectIndex;
-                    for (HsCalendarWeekView *view in [monthView weekViews]) {
-                        CGRect tmpFrame = view.frame;
-                        tmpFrame.origin.y = monthView.scrollOffsetY + viewHeight*i;
-                        view.frame = tmpFrame;
-                        i++;
-                    }
+            for (HsCaledarMonthView *monthView in _visibleViews) {
+                int i = 1;
+                monthView.scrollOffsetY = -viewHeight*selectIndex;
+                for (HsCalendarWeekView *view in [monthView weekViews]) {
+                    CGRect tmpFrame = view.frame;
+                    tmpFrame.origin.y = monthView.scrollOffsetY + viewHeight*i;
+                    view.frame = tmpFrame;
+                    i++;
                 }
-            }];
+            }
         });
     }else{
         //日历滚动到 月 状态
         dispatch_async(dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:0.4 animations:^{
-                for (HsCaledarMonthView *monthView in _visibleViews) {
-                    monthView.scrollOffsetY = 0;
-                    float viewHeight = _viewHeight / 7;
-                    int i = 1;//最上方有weektitle
-                    for (UIView *view in [monthView weekViews]) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            CGRect tmpFrame = view.frame;
-                            tmpFrame.origin.y = monthView.scrollOffsetY + viewHeight*i;
-                            view.frame = tmpFrame;
-                        });
-                        i++;
-                    }
+            for (HsCaledarMonthView *monthView in _visibleViews) {
+                monthView.scrollOffsetY = 0;
+                float viewHeight = _viewHeight / 7;
+                int i = 1;//最上方有weektitle
+                for (UIView *view in [monthView weekViews]) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        CGRect tmpFrame = view.frame;
+                        tmpFrame.origin.y = monthView.scrollOffsetY + viewHeight*i;
+                        view.frame = tmpFrame;
+                    });
+                    i++;
                 }
-
-            }];
+            }
         });
     }
 }
