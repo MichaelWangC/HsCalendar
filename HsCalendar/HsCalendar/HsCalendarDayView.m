@@ -34,12 +34,13 @@ static NSDate *selectedDate;
 
 -(void)viewInit{
     circleView = [HsCircleView new];
-    circleView.circleMargin = 3;
+    circleView.circleMargin = kCircleViewMargin;
     [self addSubview:circleView];
     
     textLabel = [[UILabel alloc] init];
     [textLabel setBackgroundColor:[UIColor clearColor]];
     textLabel.textAlignment = NSTextAlignmentCenter;
+    textLabel.font = kDayViewTextFont;
     [self addSubview:textLabel];
     
     dotView = [[HsCircleView alloc] init];

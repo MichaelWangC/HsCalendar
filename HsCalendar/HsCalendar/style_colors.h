@@ -9,6 +9,10 @@
 #ifndef style_colors_h
 #define style_colors_h
 
+#define kCircleViewMargin 1 
+#define kDayViewTextFont [UIFont systemFontOfSize:16]
+#define kWeekTitleTextFont [UIFont systemFontOfSize:16]
+
 /*---calendar color style 1---*/
 //#define COLOR_VIEW_BG [UIColor whiteColor]
 //

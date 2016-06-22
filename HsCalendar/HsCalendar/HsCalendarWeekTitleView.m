@@ -31,7 +31,7 @@ static NSArray *cacheTitlesOfWeek;
     
     for (int i = 0; i < kNumWeekDays; i++) {
         UILabel *view = [UILabel new];
-        view.font = [UIFont systemFontOfSize:15];
+        view.font = kWeekTitleTextFont;
         view.textColor = kWeekTitleTextColor;
         view.textAlignment = NSTextAlignmentCenter;
         [self addSubview:view];
