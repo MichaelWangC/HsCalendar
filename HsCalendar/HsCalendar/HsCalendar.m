@@ -314,14 +314,11 @@
 #pragma mark 滑动offset y
 -(void)setCalendarScrollY:(float)offsetY{
     HsCaledarMonthView *monthView = [_visibleViews objectAtIndex:NUMBER_PAGES_LOADED/2];
-    float monthViewOffsetY = monthView.scrollOffsetY + offsetY;
     float viewHeight = _viewHeight / 7;
     int i = 1;//最上方有weektitle
     int selectIndex = -1;
     for (HsCalendarWeekView *view in [monthView weekViews]) {
         CGRect tmpFrame = view.frame;
-        
-        if (i == 1 && tmpFrame.origin.y + monthViewOffsetY > viewHeight) monthViewOffsetY = 0;
         
         NSDate *weekFirstDate = [view weekFirstDate];
         NSDate *weekLastDate = [view weekLastDate];
@@ -333,6 +330,8 @@
             selectIndex = i-1;
         }
         
+        float monthViewOffsetY = monthView.scrollOffsetY + offsetY;
+        if (monthViewOffsetY > 0) monthViewOffsetY = 0;
         if (selectIndex != -1 && monthViewOffsetY < -viewHeight*selectIndex) monthViewOffsetY = -viewHeight*selectIndex;
         
         tmpFrame.origin.y = monthViewOffsetY + viewHeight*i;

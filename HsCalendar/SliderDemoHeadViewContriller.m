@@ -62,7 +62,7 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     if (!calendar.isWeekMode) [self.view bringSubviewToFront:tableview];
     float changeY = tableContentOffsetY-scrollView.contentOffset.y;
-    NSLog(@"===%f===%f",scrollView.contentOffset.y,tableContentOffsetY);
+//    NSLog(@"===%f===%f===%f",scrollView.contentOffset.y,tableContentOffsetY,changeY);
     [calendar setCalendarScrollY:changeY];
 }
 
@@ -85,27 +85,50 @@
 
 -(void)scrollCalendar{
     float changeY = tableContentOffsetY - tableview.contentOffset.y;
-//    fabs(changeY) > 40
-    if (changeY > 0) {
-        //向下滑动
-        if (tableview.contentOffset.y > -calendarHeight) {
-            tableContentOffsetY = [calendar calendarHeightWhenInWeekMode] - calendarHeight;
-            
+    float changeReginH = 30;
+    float offsetEnd = [calendar calendarHeightWhenInWeekMode] - calendarHeight;
+    if (calendar.isWeekMode) {
+        ///向下滑动 周切换月
+        if (changeY > changeReginH) {
+            calendar.isWeekMode = NO;
+            [UIView animateWithDuration:0.5 animations:^{
+                tableview.contentOffset = CGPointMake(0, offsetEnd);
+            } completion:^(BOOL finished) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.view bringSubviewToFront:calendar];
+                    tableContentOffsetY = offsetEnd;
+                });
+            }];
+        }else if (changeY > 0 && changeY < changeReginH){
+            //向下滑动未到日历切换模式距离
+            [UIView animateWithDuration:0.5 animations:^{
+                tableview.contentOffset = CGPointMake(0, 0);
+            }];
+        }
+    }else{
+        ///向上滑动 月切换周
+        if (changeY < -changeReginH && changeY > offsetEnd) {
+            calendar.isWeekMode = YES;
+            [UIView animateWithDuration:0.5 animations:^{
+                tableview.contentOffset = CGPointMake(0, 0);
+            } completion:^(BOOL finished) {
+                tableContentOffsetY = 0;
+            }];
+        }else if (changeY < offsetEnd){
+            //滑动距离超过日历控件切换距离
+            tableContentOffsetY = 0;
+            calendar.isWeekMode = YES;
+        }else if (changeY < 0 && changeY > -changeReginH){
+            //向上滑动未到日历切换模式距离
             [UIView animateWithDuration:0.5 animations:^{
                 tableview.contentOffset = CGPointMake(0, tableContentOffsetY);
             } completion:^(BOOL finished) {
-                [self.view bringSubviewToFront:calendar];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.view bringSubviewToFront:calendar];
+                });
             }];
-            calendar.isWeekMode = NO;
-        }
-    }else{
-        //向上滑动
-        if (tableview.contentOffset.y < 0) {
-            tableContentOffsetY = 0;
-            [UIView animateWithDuration:0.5 animations:^{
-                tableview.contentOffset = CGPointMake(0, tableContentOffsetY);
-            }];
-            calendar.isWeekMode = YES;
+        }else{
+            [self.view bringSubviewToFront:calendar];
         }
     }
 }
