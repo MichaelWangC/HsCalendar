@@ -47,6 +47,13 @@
                                     <segue destination="QTb-14-Qlv" kind="push" id="Mj4-Qu-qwv"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qep-Vw-0nW">
+                                <rect key="frame" x="115" y="153" width="91" height="30"/>
+                                <state key="normal" title="滑动Demo2"/>
+                                <connections>
+                                    <segue destination="GVN-aa-30V" kind="push" id="B0i-tb-v9m"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -55,6 +62,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-263" y="170"/>
+        </scene>
+        <!--Slider Demo Head View Contriller-->
+        <scene sceneID="U4f-5a-EiN">
+            <objects>
+                <viewController id="GVN-aa-30V" customClass="SliderDemoHeadViewContriller" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="urh-3y-oyb"/>
+                        <viewControllerLayoutGuide type="bottom" id="hSN-7A-Swt"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="HJX-nC-mYo">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Hzz-wi-r1V"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ini-0h-sfV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-263" y="873"/>
         </scene>
         <!--Slider Demo Controller-->
         <scene sceneID="KuY-hr-X3m">
@@ -73,7 +99,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2if-6g-c8t" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="181" y="536"/>
+            <point key="canvasLocation" x="181" y="382"/>
         </scene>
         <!--Normal Controller-->
         <scene sceneID="M15-TI-zBT">
@@ -92,7 +118,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bPl-Uy-lr4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="181" y="-107"/>
+            <point key="canvasLocation" x="181" y="-239"/>
         </scene>
     </scenes>
 </document>

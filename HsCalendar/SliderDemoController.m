@@ -74,7 +74,7 @@
 
 -(void)handlePan:(UIPanGestureRecognizer*)gesRec{
     CGPoint offset = [gesRec translationInView:contentview];
-
+    NSLog(@"===%f===",offset.y);
     [calendar setCalendarScrollY:offset.y];
     
     if (gesRec.state == UIGestureRecognizerStateChanged) {

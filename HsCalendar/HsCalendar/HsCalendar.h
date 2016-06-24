@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "style_colors.h"
+#import "HsCalendar_style.h"
 
 @protocol HsCalendarDelegate;
 @protocol HsCalendarDataSource;

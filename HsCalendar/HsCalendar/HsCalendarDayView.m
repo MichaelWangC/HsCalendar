@@ -92,17 +92,19 @@ static NSDate *selectedDate;
         [dateFormatter setDateFormat:@"dd"];
     }
     
-    textLabel.text = [dateFormatter stringFromDate:currentDate];
-    
-    if([self isSameDate:selectedDate withOhterDate:self.currentDate]){
-        if(!isSelected){
-            [self setSelected:YES animated:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        textLabel.text = [dateFormatter stringFromDate:currentDate];
+        
+        if([self isSameDate:selectedDate withOhterDate:self.currentDate]){
+            if(!isSelected){
+                [self setSelected:YES animated:NO];
+            }
+        }else if(isSelected){
+            [self setSelected:NO animated:NO];
+        }else{
+            [self setDayViewColor];
         }
-    }else if(isSelected){
-        [self setSelected:NO animated:NO];
-    }else{
-        [self setDayViewColor];
-    }
+    });
 }
 
 #pragma mark 样式、颜色设置

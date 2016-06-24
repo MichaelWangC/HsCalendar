@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		019924391D1A70500039094B /* SliderDemoHeadViewContriller.m in Sources */ = {isa = PBXBuildFile; fileRef = 019924381D1A70500039094B /* SliderDemoHeadViewContriller.m */; };
 		F701F60C1CC61891008BA31A /* HsCalendarWeekView.m in Sources */ = {isa = PBXBuildFile; fileRef = F701F60B1CC61891008BA31A /* HsCalendarWeekView.m */; };
 		F701F60F1CC618B0008BA31A /* HsCalendarWeekTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = F701F60E1CC618B0008BA31A /* HsCalendarWeekTitleView.m */; };
 		F701F6121CC626BD008BA31A /* HsCalendarDayView.m in Sources */ = {isa = PBXBuildFile; fileRef = F701F6111CC626BD008BA31A /* HsCalendarDayView.m */; };
@@ -43,7 +44,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		019924351D1248360039094B /* style_colors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = style_colors.h; sourceTree = "<group>"; };
+		019924371D1A70500039094B /* SliderDemoHeadViewContriller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderDemoHeadViewContriller.h; sourceTree = "<group>"; };
+		019924381D1A70500039094B /* SliderDemoHeadViewContriller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SliderDemoHeadViewContriller.m; sourceTree = "<group>"; };
+		0199243A1D1A75AF0039094B /* HsCalendar_style.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HsCalendar_style.h; sourceTree = "<group>"; };
 		F701F60A1CC61890008BA31A /* HsCalendarWeekView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HsCalendarWeekView.h; sourceTree = "<group>"; };
 		F701F60B1CC61891008BA31A /* HsCalendarWeekView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HsCalendarWeekView.m; sourceTree = "<group>"; };
 		F701F60D1CC618B0008BA31A /* HsCalendarWeekTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HsCalendarWeekTitleView.h; sourceTree = "<group>"; };
@@ -140,6 +143,8 @@
 				F7EFB0F61CC77E4900C53903 /* NormalController.m */,
 				F7EFB0F81CC7839400C53903 /* SliderDemoController.h */,
 				F7EFB0F91CC7839400C53903 /* SliderDemoController.m */,
+				019924371D1A70500039094B /* SliderDemoHeadViewContriller.h */,
+				019924381D1A70500039094B /* SliderDemoHeadViewContriller.m */,
 			);
 			path = HsCalendar;
 			sourceTree = "<group>";
@@ -173,7 +178,7 @@
 		F7E4BA6F1CC4AA1B0083EDE8 /* HsCalendar */ = {
 			isa = PBXGroup;
 			children = (
-				019924351D1248360039094B /* style_colors.h */,
+				0199243A1D1A75AF0039094B /* HsCalendar_style.h */,
 				F7E4BA701CC4B4990083EDE8 /* HsCalendar.h */,
 				F7E4BA711CC4B4990083EDE8 /* HsCalendar.m */,
 				F7E4BA731CC4B5890083EDE8 /* HsCalendarMonthView.h */,
@@ -321,6 +326,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				019924391D1A70500039094B /* SliderDemoHeadViewContriller.m in Sources */,
 				F7E4BA441CC4A9FA0083EDE8 /* ViewController.m in Sources */,
 				F7EFB0F41CC71DB600C53903 /* HsCircleView.m in Sources */,
 				F7EFB0FA1CC7839400C53903 /* SliderDemoController.m in Sources */,

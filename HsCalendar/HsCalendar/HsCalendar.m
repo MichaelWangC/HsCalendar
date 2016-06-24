@@ -135,8 +135,10 @@
     }
     
     //滚动到中间页
-    int midpage = NUMBER_PAGES_LOADED/2;
-    [_calendarView scrollRectToVisible:CGRectMake(_viewWidth * midpage, 0, _viewWidth, _viewHeight) animated:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        int midpage = NUMBER_PAGES_LOADED/2;
+        [_calendarView scrollRectToVisible:CGRectMake(_viewWidth * midpage, 0, _viewWidth, _viewHeight) animated:NO];
+    });
 }
 
 #pragma mark 开始月份
@@ -259,22 +261,26 @@
 
 #pragma mark 返回代理方法
 -(void)delegateDidSelectDate:(NSDate *)dateSelected{
-    if ([self.delegate respondsToSelector:@selector(calendarDidSelectedDate:)]) {
-//        NSDate *localeDate = [self getLocalTimeZoneDate:dateSelected];
-        [self.delegate calendarDidSelectedDate:dateSelected];
-    }
-    if ([self.delegate respondsToSelector:@selector(calendarCurrentYear:andMonth:)]) {
-        NSDateComponents *componentsCurrentDate = [[HsCalendar calendar] components:NSCalendarUnitYear|NSCalendarUnitMonth fromDate:dateSelected];
-        [self.delegate calendarCurrentYear:componentsCurrentDate.year andMonth:componentsCurrentDate.month];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(calendarDidSelectedDate:)]) {
+            //        NSDate *localeDate = [self getLocalTimeZoneDate:dateSelected];
+            [self.delegate calendarDidSelectedDate:dateSelected];
+        }
+        if ([self.delegate respondsToSelector:@selector(calendarCurrentYear:andMonth:)]) {
+            NSDateComponents *componentsCurrentDate = [[HsCalendar calendar] components:NSCalendarUnitYear|NSCalendarUnitMonth fromDate:dateSelected];
+            [self.delegate calendarCurrentYear:componentsCurrentDate.year andMonth:componentsCurrentDate.month];
+        }
+    });
 }
 
 #pragma mark 日期显示数据重新加载
 - (void)reloadData{
-    if ([self.dataSource respondsToSelector:@selector(calendarHaveEvent:)]) {
-        NSArray *dates = [self.dataSource calendarHaveEvent:self];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kHsCalendarDayHaveEvent object:dates];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.dataSource respondsToSelector:@selector(calendarHaveEvent:)]) {
+            NSArray *dates = [self.dataSource calendarHaveEvent:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kHsCalendarDayHaveEvent object:dates];
+        }
+    });
 }
 
 #pragma 月份跳转
