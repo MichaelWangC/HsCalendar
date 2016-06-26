@@ -82,7 +82,7 @@
     NSDateComponents *dayComponent = [NSDateComponents new];
     dayComponent.day = kWeekNum - 1;
     lastDate = [[HsCalendar calendar] dateByAddingComponents:dayComponent toDate:_currentDate options:0];
-    return lastDate;
+    return [lastDate dateByAddingTimeInterval:24*60*60-1];
 }
 
 @end
