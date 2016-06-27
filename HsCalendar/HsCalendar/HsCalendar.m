@@ -311,7 +311,7 @@
     return _viewHeight;
 }
 
-#pragma mark 滑动offset y
+#pragma mark 滑动offsetY，offsetY>0 日历向下滑动；offsetY<0 日历向上滑动
 -(void)setCalendarScrollY:(float)offsetY{
     HsCaledarMonthView *monthView = [_visibleViews objectAtIndex:NUMBER_PAGES_LOADED/2];
     float viewHeight = _viewHeight / 7;

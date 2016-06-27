@@ -18,6 +18,8 @@
     
     float topValue;
     float currentTopConstraintConstant;
+    float tableScrollDownOffsetY;
+    float isTableScrollDownChange;
 }
 
 @end
@@ -28,6 +30,7 @@
     [super viewDidLoad];
     topValue = 300;
     currentTopConstraintConstant = topValue;//tableview 距离顶部的高度
+    tableScrollDownOffsetY = 0;
     
     calendar = [[HsCalendar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, topValue)];
     calendar.delegate = self;
@@ -93,17 +96,83 @@
     }
     if (gesRec.state == UIGestureRecognizerStateEnded) {
         [self.view setNeedsLayout];
+        BOOL isScrollUp = topConstraint.constant-currentTopConstraintConstant<0?YES:NO;
         [UIView animateWithDuration:0.4 animations:^{
-            CGFloat toTopConstant = topValue - (topValue - [calendar calendarHeightWhenInWeekMode])/3;
-            if (topConstraint.constant < toTopConstant) {
-                topConstraint.constant = [calendar calendarHeightWhenInWeekMode];
-                tableview.scrollEnabled = YES;
-                [calendar setIsWeekMode:YES];
+            CGFloat toTopConstant = 30;//kHeadViewHeight - (kHeadViewHeight - [_calendar calendarHeightWhenInWeekMode])/3;
+            if (isScrollUp) {
+                //月切换周
+                if (topConstraint.constant < topValue-toTopConstant) {
+                    topConstraint.constant = [calendar calendarHeightWhenInWeekMode];
+                    tableview.scrollEnabled = YES;
+                    [calendar setIsWeekMode:YES];
+                }else{
+                    topConstraint.constant = topValue;
+                    tableview.scrollEnabled = NO;
+                    [tableview setContentOffset:CGPointMake(0, 0) animated:YES];
+                    [calendar setIsWeekMode:NO];
+                }
             }else{
+                //周切换月
+                if (topConstraint.constant > topValue-[calendar calendarHeightWhenInWeekMode]-toTopConstant) {
+                    topConstraint.constant = topValue;
+                    tableview.scrollEnabled = NO;
+                    [tableview setContentOffset:CGPointMake(0, 0) animated:YES];
+                    [calendar setIsWeekMode:NO];
+                }else{
+                    topConstraint.constant = [calendar calendarHeightWhenInWeekMode];
+                    tableview.scrollEnabled = YES;
+                    [calendar setIsWeekMode:YES];
+                }
+            }
+            [self.view layoutIfNeeded];
+        }];
+        currentTopConstraintConstant = topConstraint.constant;
+    }
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    NSLog(@"%f",scrollView.contentOffset.y);
+    if (scrollView.contentOffset.y < 0) {
+        isTableScrollDownChange = YES;
+        tableScrollDownOffsetY += scrollView.contentOffset.y;
+        [calendar setCalendarScrollY:-tableScrollDownOffsetY];
+        topConstraint.constant -= scrollView.contentOffset.y;
+        [self.view layoutIfNeeded];
+        if (topConstraint.constant > topValue) {
+            topConstraint.constant = topValue;
+            tableview.scrollEnabled = NO;
+            [tableview setContentOffset:CGPointMake(0, 0) animated:YES];
+        }
+    }
+}
+
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    if (decelerate) return;
+    [self scrollChangeCalendarMode];
+}
+
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    [self scrollChangeCalendarMode];
+}
+
+-(void)scrollChangeCalendarMode{
+    if (isTableScrollDownChange) {
+        tableScrollDownOffsetY = 0;
+        isTableScrollDownChange = NO;
+        
+        [self.view setNeedsLayout];
+        [UIView animateWithDuration:0.4 animations:^{
+            //周切换月
+            CGFloat toTopConstant = 30;
+            if (topConstraint.constant > topValue-[calendar calendarHeightWhenInWeekMode]-toTopConstant) {
                 topConstraint.constant = topValue;
                 tableview.scrollEnabled = NO;
                 [tableview setContentOffset:CGPointMake(0, 0) animated:YES];
                 [calendar setIsWeekMode:NO];
+            }else{
+                topConstraint.constant = [calendar calendarHeightWhenInWeekMode];
+                tableview.scrollEnabled = YES;
+                [calendar setIsWeekMode:YES];
             }
             [self.view layoutIfNeeded];
         }];
@@ -130,14 +199,6 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableview deselectRowAtIndexPath:indexPath animated:YES];
-}
-
--(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-//    NSLog(@"%f",scrollView.contentOffset.y);
-    if (scrollView.contentOffset.y < 0) {
-        tableview.scrollEnabled = NO;
-        tableview.contentOffset = CGPointMake(0, 0);
-    }
 }
 
 -(void)setViewConstraint:(UIView *)view{

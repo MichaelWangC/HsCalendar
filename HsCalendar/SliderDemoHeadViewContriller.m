@@ -62,12 +62,12 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     if (!calendar.isWeekMode) [self.view bringSubviewToFront:tableview];
     float changeY = tableContentOffsetY-scrollView.contentOffset.y;
-//    NSLog(@"===%f===%f===%f",scrollView.contentOffset.y,tableContentOffsetY,changeY);
+    NSLog(@"===%f===%f===%f",scrollView.contentOffset.y,tableContentOffsetY,changeY);
     [calendar setCalendarScrollY:changeY];
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    NSLog(@"scrollViewDidEndDragging");
+//    NSLog(@"scrollViewDidEndDragging");
     if (decelerate) {
         return;
     }
@@ -75,11 +75,11 @@
 }
 
 -(void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
-    NSLog(@"scrollViewWillBeginDecelerating");
+//    NSLog(@"scrollViewWillBeginDecelerating");
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    NSLog(@"scrollViewDidEndDecelerating");
+//    NSLog(@"scrollViewDidEndDecelerating");
     [self scrollCalendar];
 }
 
