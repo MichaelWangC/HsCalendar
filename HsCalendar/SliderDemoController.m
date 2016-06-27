@@ -48,7 +48,6 @@
     tableview.delegate = self;
     tableview.dataSource = self;
     tableview.backgroundColor = [UIColor clearColor];
-    tableview.scrollEnabled = NO;
     [contentview addSubview:tableview];
     [self setTableViewConstraint];
     
