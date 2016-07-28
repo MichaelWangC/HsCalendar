@@ -136,11 +136,11 @@
         tableScrollDownOffsetY += scrollView.contentOffset.y;
         [calendar setCalendarScrollY:-tableScrollDownOffsetY];
         topConstraint.constant -= scrollView.contentOffset.y;
+        [tableview setContentOffset:CGPointMake(0, 0) animated:YES];
         [self.view layoutIfNeeded];
         if (topConstraint.constant > topValue) {
             topConstraint.constant = topValue;
             tableview.scrollEnabled = NO;
-            [tableview setContentOffset:CGPointMake(0, 0) animated:YES];
         }
     }
 }
@@ -165,8 +165,8 @@
             CGFloat toTopConstant = 30;
             if (topConstraint.constant > topValue-[calendar calendarHeightWhenInWeekMode]-toTopConstant) {
                 topConstraint.constant = topValue;
-                tableview.scrollEnabled = NO;
                 [tableview setContentOffset:CGPointMake(0, 0) animated:YES];
+                tableview.scrollEnabled = NO;
                 [calendar setIsWeekMode:NO];
             }else{
                 topConstraint.constant = [calendar calendarHeightWhenInWeekMode];
